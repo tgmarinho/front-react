@@ -1,6 +1,4 @@
-
-## Aula 13 - Exibindo Repositório
-
+## Aula 14 - Exibindo Issues
 
 
-Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula13-exibindo-repositorio](https://github.com/tgmarinho/front-react/tree/aula13-exibindo-repositorio)
+Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula14-exibindo-issues](https://github.com/tgmarinho/front-react/tree/aula14-exibindo-issues)
