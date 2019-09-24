@@ -1,5 +1,12 @@
 import React from 'react';
 
-const Main = () => <h1>Main</h1>;
+import { Title } from './styles';
+
+const Main = () => (
+  <Title error>
+    Main
+    <small>menor</small>
+  </Title>
+);
 
 export default Main;
