@@ -1,55 +1,48 @@
-## Aula 04 - Styled Components
+## Aula 07 - Adicionando repositórios
 
-Vamos instalar uma biblioteca muito boa para estilizar a aplicação com React.
+Quando o usuário digitar o nome de usuário valido, vamos buscar o repostório e salvar no estado.
 
-```
-yarn add styled-components
-```
-
-Ela muda a forma de escrever o CSS no React e no React Native.
-
-Agora não usaremos as propriedades style e nem className, o próprio componente será estilizado.
-
-No VSCode tem a extensão do styled-components que é ajuda muito a desenvolver pois ele entende a sintax css de dentro do js.
-
-O código é escrito com JS e também usamos a sintaxe CSS.
-
-Legal que o styled-components permite o encadeamento de CSS também. E o estilo não é global, é apenas aplicado para o componente.
-
-Podemos também acessar as propriedades dos componentes no CSS.
-
-Criamos o arquivo `styles.js`  na pasta `Main`.
-```
-import styled from 'styled-components';
-
-export const Title = styled.h1`
-  font-size: 24px;
-  color: ${({ error }) => (error ? 'red' : '#7159c1')};
-  font-family: Arial, Helvetica, sans-serif;
-
-  small {
-    font-size: 14px;
-    color: #333;
-  }
-`;
-```
-Agora criaremos componentes estilizados.
-
-Vamos aplicar no Main/index.js:
+Instalamos a lib axios para fazer requisição a API externa.
 
 ```
-import React from 'react';
+yarn add axios
+```
+E agora podemos configurar um baseURL para fazer requisições passando apenas a rota e os paramêtros de consulta da API.
 
-import { Title } from './styles';
+Crio a pasta `services` dentro da `src` e o arquivo `api.js` dentro da nova pasta, com o conteúdo.
 
-const Main = () => (
-  <Title error>
-    Main
-    <small>menor</small>
-  </Title>
-);
+```
+import axios from 'axios';
 
-export default Main;
+const api = axios.create({
+  baseURL: 'https://api.github.com',
+});
+
+export default api;
 ```
 
-Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula04-styled-components](https://github.com/tgmarinho/front-react/tree/aula04-styled-components)
+E no método handleSubmit da Main.js, quando o usuário salvar o formulário, pegamos o valor digitado e buscamos na api do github o repositório informado:
+
+```
+...
+  handleSubmit = async e => {
+    e.preventDefault();
+
+    this.setState({ loading: true });
+
+    const { newRepo, repositories } = this.state;
+    const response = await api.get(`/repos/${newRepo}`);
+    const data = {
+      name: response.data.full_name,
+    };
+
+    this.setState({
+      repositories: [...repositories, data],
+      newRepo: '',
+      loading: false,
+    });
+  };
+ ...
+```
+
+Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula07-add-repositorios](https://github.com/tgmarinho/front-react/tree/aula07-add-repositorios)
