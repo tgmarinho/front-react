@@ -1,5 +1,6 @@
 
-## Aula 12 - Definindo PropTypes
+## Aula 13 - Exibindo Repositório
 
 
-Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula12-definindo-prop-types ](https://github.com/tgmarinho/front-react/tree/aula12-definindo-prop-types)
+
+Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula13-exibindo-repositorio](https://github.com/tgmarinho/front-react/tree/aula13-exibindo-repositorio)
