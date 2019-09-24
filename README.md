@@ -1,135 +1,99 @@
-## Aula 02 - ESLint, Prettier e EditorConfig
+## Aula 03 - Roteamento no React
 
-Vamos configurar as ferramentas ESLint, Prettier e EditorConfig para manter uma *style guide* no projeto.
+Estamos criando um SPA, e as nossas páginas terão uma navegação, porém não teremos um refresh na tela quando mudarmos de página, isso será instantâneo, o usuário chama outra rota, muda a página, faz requisição no servidor e página é exibida e a tela nem pisca!
 
-### Editor Config
-
-Primeiro vamos configurar o EditorConfig, usando o VSCode e a extensão do EditorConfig basta clicar com botão direito do mouse e escolher: `generate .editorConfig`, e o VSCode vai criar um arquivo para nós.
-
-E faço uma pequena alteração.
+E para fazer esse gerenciamento de rotas no frontend da aplicação vamos utilizar a biblioteca [React Router Dom](https://reacttraining.com/react-router/web/guides/quick-start):
 
 ```
-root = true
+yarn add react-router-dom
+```
 
-[*]
-end_of_line = lf # forçar o padrão do final da linha para padrão unix
-indent_style = space
-indent_size = 2
-charset = utf-8
-trim_trailing_whitespace = true # mudo para  true
-insert_final_newline = true # mudo para true
+E agora podemos criar um arquivo `routes.js` na pasta `src`.
+
+Criamos também uma pasta `pages` que conterá a pasta `Main` com um arquivo chamando  `index.js`. E outra pasta `Repository` com um arquivo chamado `index.js`.
+
+O conteúdo do arquivo vai estar no link do github.
+
+Dentro do routes.js vamos importar o BrowserRouter da lib react-router-dom,
+BrowserRouter é responsável por permitir criar uma navegação entre rotas e atualizar a barra de endereços.
+
+** BrowserRouter **: Deve englobar todas as rotas
+
+o ** Switch ** é usado para controlar que apenas uma rota seja chamada por momento.
+
+No ** react-router-dom  ** é possível chamar mais de uma rota pro vez.
+
+** Route ** é a cada rota da aplicação.
+
+** Route ** recebe um caminho (path) e o componente (Component).
+
+OBS: Toda vez eu estiver utilizando uma sintaxe de jsx temos que importar o react.
+
+```
+import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
+import Main from './pages/Main';
+import Repository from './pages/Repository';
+
+export default function Routes() {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" component={Main} />
+        <Route path="/repository" component={Repository} />
+      </Switch>
+    </BrowserRouter>
+  );
+}
 
 ```
 
-### Eslint
+Até aqui criamos um componente Routes que será importado no `App.js`, ele retorna um BrowserRouter que engloba todas as routas para fazer o gerenciamento das rotas na barra de endereço no navegador, e ele tem um filho Switch que é responsável por executar apenas uma rota por vez e dentro dele tem uma ou mais rotas, que são as Route que recebe um path e o seus respectivo Component.
 
-Vamos instalar o eslint como dependência de desenvolvimento:
-
-```
-yarn add eslint -D
-```
-
-e executar:
+Agora só importar a routa no App.js:
 
 ```
-yarn eslint --init
+import React from 'react';
+
+import Routes from './routes';
+
+function App() {
+  return <Routes />;
+}
+
+export default App;
 ```
 
-Opções:
+Testando a aplicação vamos observer um comportamento não esperado.
+
+Só conseguimos acessar a rota / que redireciona para o componente Main.
+
+Quando tentamos acessar /repository é redirecionado para o componente Main, também!
+
+Isso ocorre porque o react-router-dom não vê se o path é igual ao path da routa, mas ele  verifica o começo, se começa com '/' ele já envia para a primeira rota que tenha o '/'. E como ambas tem o '/' e a primeira rota leva para a Main, então sempre a aplicação será redirecionada para a Main.
+
+Para verificar por igualdade nas rotas, basta usar a propriedade `exact`.
 
 ```
-❯ To check syntax, find problems, and enforce code style
+import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-❯ JavaScript modules (import/export)
+import Main from './pages/Main';
+import Repository from './pages/Repository';
 
-❯ React
-
-❯ Typscript -> Não
-
-❯ Browser
-
-❯ Use a popular style guide
-
-❯ Airbnb (https://github.com/airbnb/javascript)
-
-❯ JavaScript
-
-❯ Y
-```
-
-e as dependências serão instaladas.
-
-O Eslint usa o npm por padrão, então depois de baixar as dependências, eu removo o arquivo `package.json-lock` e rodo o comando `yarn` novamente para atualizar as dependências no `yarn.lock`.
-
-Pronto, agora o código vai acusar alguns erros, e para concluir a configuração vamos instalar o Prettier.
-
-### Prettier
-
-Para instalar o prettier e alguns plugins de configuração, vamos rodar no terminal:
-
-```
-yarn add prettier eslint-config-prettier eslint-plugin-prettier babel-eslint -D
-```
-
-E agora configuraremos o `.eslintrc`:
-
-```
-module.exports = {
-  env: {
-    browser: true,
-    es6: true,
-  },
-  extends: ['airbnb', 'prettier', 'prettier/react'],
-  globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly',
-  },
-  parser: 'babel-eslint',
-  parserOptions: {
-    ecmaFeatures: {
-      jsx: true,
-    },
-    ecmaVersion: 2018,
-    sourceType: 'module',
-  },
-  plugins: ['react', 'prettier'],
-  rules: {
-    'prettier/prettier': 'error',
-    'react/jsx-filename-extension': ['warn', { extensions: ['.jsx', 'js'] }],
-    'import/prefer-default-export': 'off',
-  },
-};
-```
-
-E depois criamos um arquivo `.prettierrc` na raiz do projeto, com a seguinte configuração:
-
-```
-{
-	"singleQuote":  true,
-	"trailingComma":  "es5"
+export default function Routes() {
+  return (
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact component={Main} />
+        <Route path="/repository" component={Repository} />
+      </Switch>
+    </BrowserRouter>
+  );
 }
 ```
 
-Isso melhora a integração do prettier com a style guid airbnb que estamos utilizando.
+Agora sim as duas páginas estão sendo renderizadas!
 
-Pronto! Agora o prettier deixa o código mais bonita e o eslint procura por erros na style-guide.
-
-Agora toda vez que entrar em um arquivo e salvar, ele vai verificar se as regras estão de acordo com o style-guide através do eslint e o prettier irá formatar de acordo com as regras do style-guide e eslint.
-
-Podemos automatizar isso fazendo um script no package.json:
-
-```
-"lint":  "eslint --fix src --ext .js"
-```
-
-e agora rodar o comando:
-
-```
-yarn lint
-```
-
-Para deixar o código seguindo as normas da style-guide.
-
-
-
-Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula02-eslint-prettier-editorconfig](https://github.com/tgmarinho/front-react/tree/aula02-eslint-prettier-editorconfig)
+Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula03-roteamento-no-react](https://github.com/tgmarinho/front-react/tree/aula03-roteamento-no-react)
