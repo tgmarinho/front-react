@@ -1,6 +1,7 @@
+## Aula 09 - Utilizando LocalStorage
 
-## Aula 08 - Listando repositórios
+Vamos salvar os repositórios no localstorage, que é um banco de dados embutido no navegador que armazena chave valor em Strings.
 
 
 
-Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula08-listando-repositorios](https://github.com/tgmarinho/front-react/tree/aula08-listando-repositorios)
+Fim, código fonte: [https://github.com/tgmarinho/front-react/tree/aula09-utilizando-localstorage](https://github.com/tgmarinho/front-react/tree/aula09-utilizando-localstorage)
